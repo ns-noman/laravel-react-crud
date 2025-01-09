@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import Loading from '../components/Loading';
+import Swal from 'sweetalert2';
 
 export default function StudentEdit() {
-
+    const navigate = useNavigate();
     const {id} = useParams();
 
     const [loading, setLoading] = useState(true);
@@ -48,9 +49,15 @@ export default function StudentEdit() {
             email: student.email,
             phone: student.phone,
         };
-        axios.put(`http://127.0.0.1:8000/api/students/${id}/update`, data).then(res=>{
-            alert(res.data.message);
+        axios.put(`http://127.0.0.1:8000/api/students/${id}/update`, data)
+        .then(res=>{
+             Swal.fire(
+                'Updated!',
+                'Student has been updated!',
+                'success'
+            );
             setLoading(false);
+            navigate('/students');
         })
         .catch(function(error){
             if(error.response){
